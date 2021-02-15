@@ -1,0 +1,39 @@
+---
+title: "Hitzeinseleffekt in Marburg"
+author: "Lena Perzlmaier & Jonas Müller"
+date: "15 2 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+text - Erklärung was ist UHI und warum relevant
+
+Wir haben mithilfe von Satellitendaten, die die Oberflächentemperatur aufzeichnen, berechnet wie stark der Hitzeinseleffekt in Marburg in den Jahren 2000, 2006, 2012 und 2018 ausgeprägt war.
+
+```{r echo = FALSE, message=FALSE}
+# load libraries
+library(raster)
+library(mapview)
+
+# load Verzeichnisse
+shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
+shapefile <- '/Marburg_Stadtgebiet.shp'
+lstdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/LST_Daten/2000"
+clcdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/CLC/reclass"
+
+outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/UHI_Marburg_Ergebnisse/2000/'
+
+# load data
+Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
+Buffer_shp <- shapefile(file.path(outdir, "Marburg_2000_buffer.shp"))
+
+mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE) + 
+  mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE)
+```
+
+
+## 2000
+
