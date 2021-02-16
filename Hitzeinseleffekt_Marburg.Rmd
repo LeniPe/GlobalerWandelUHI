@@ -1,39 +1,78 @@
 ---
 title: "Hitzeinseleffekt in Marburg"
 author: "Lena Perzlmaier & Jonas Müller"
-date: "15 2 2021"
-output: html_document
+output:   
+  html_document:
+    toc: true
+    toc_float: true
+    theme: sandstone
+    highlight: pygments
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+# load libraries
+library(raster)
+library(mapview)
+library(leaflet)
+library(RColorBrewer)
+
+# load Verzeichnisse
+shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
+shapefile <- '/Marburg_Stadtgebiet.shp'
+lstdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/LST_Daten"
+clcdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/CLC/reclass"
+outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/UHI_Marburg_Ergebnisse'
+
+# load data
+Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
+Buffer_shp <- shapefile(file.path(outdir, "2000/Marburg_2000_buffer.shp"))
+CLC_2000 <- raster(file.path(clcdir, "CLC_2000_reclass.tif"))
+LST_2000 <- raster(file.path(lstdir, "2000/LST_2000_mean_AOI.tif"))
+UHI_2000 <- raster(file.path(outdir, "2000/UHIE_Marburg_2000_LUC1_Sommer.tif"))
+
+# define color palettes
+pal_clc <- c(colors()[59],  colors()[148],colors()[51], colors()[123])
+
+pal_lst <- rev(brewer.pal(11,"RdBu"))
+
+pal_uhi <- brewer.pal(5, "OrRd")
+
+# new attribute table for CLC data
+attributes_CLC <- data.frame(ID = 1:4,                                                                         
+                             value = c("Bebaute Flächen", "Landwirtschaftliche Flächen", "Wald", "Gewässer"))
+
+# convert LST data from Kelvin to Celsius
+LST_2000_C <- LST_2000 -272.15
 ```
 
 text - Erklärung was ist UHI und warum relevant
 
 Wir haben mithilfe von Satellitendaten, die die Oberflächentemperatur aufzeichnen, berechnet wie stark der Hitzeinseleffekt in Marburg in den Jahren 2000, 2006, 2012 und 2018 ausgeprägt war.
 
+Dafür haben wir die Temperatur innerhalb des Stadtgebiets mit der Temperatur in einem Umkreis von 10km verglichen:
+
 ```{r echo = FALSE, message=FALSE}
-# load libraries
-library(raster)
-library(mapview)
-
-# load Verzeichnisse
-shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
-shapefile <- '/Marburg_Stadtgebiet.shp'
-lstdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/LST_Daten/2000"
-clcdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/CLC/reclass"
-
-outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/UHI_Marburg_Ergebnisse/2000/'
-
-# load data
-Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
-Buffer_shp <- shapefile(file.path(outdir, "Marburg_2000_buffer.shp"))
-
 mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE) + 
   mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE)
 ```
 
 
-## 2000
+## Hitzeinseleffekt im Jahr 2000
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+CLC_2000@data@attributes[[1]] <- attributes_CLC
+
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE) +
+  mapview(LST_2000_C, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+  mapview(CLC_2000, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
+  mapview(UHI_2000, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
+  
+
+m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
+                 lat = mean(coordinates(Marburg_shp)[,2]), 
+                 zoom = 10)
+
+```
 
