@@ -17,6 +17,7 @@ library(raster)
 library(mapview)
 library(leaflet)
 library(RColorBrewer)
+library(lattice)
 
 # load Verzeichnisse
 shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
@@ -28,44 +29,78 @@ outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_T
 # load data
 Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
 Buffer_shp <- shapefile(file.path(outdir, "2000/Marburg_2000_buffer.shp"))
+
 CLC_2000 <- raster(file.path(clcdir, "CLC_2000_reclass.tif"))
 LST_2000 <- raster(file.path(lstdir, "2000/LST_2000_mean_AOI.tif"))
-UHI_2000 <- raster(file.path(outdir, "2000/UHIE_Marburg_2000_LUC1_Sommer.tif"))
+UHI_2000 <- raster(file.path(outdir, "2000/UHIE_Marburg_2000_LUC_all_Sommer.tif"))
+
+CLC_2006 <- raster(file.path(clcdir, "CLC_2006_reclass.tif"))
+LST_2006 <- raster(file.path(lstdir, "2006/LST_2006_mean_AOI.tif"))
+UHI_2006 <- raster(file.path(outdir, "2006/UHIE_Marburg_2006_LUC_all_Sommer.tif"))
+
+CLC_2012 <- raster(file.path(clcdir, "CLC_2012_reclass.tif"))
+LST_2012 <- raster(file.path(lstdir, "2012/LST_2012_mean_AOI.tif"))
+UHI_2012 <- raster(file.path(outdir, "2012/UHIE_Marburg_2012_LUC_all_Sommer.tif"))
+
+CLC_2018 <- raster(file.path(clcdir, "CLC_2018_reclass.tif"))
+LST_2018 <- raster(file.path(lstdir, "2018/LST_2018_mean_AOI.tif"))
+UHI_2018 <- raster(file.path(outdir, "2018/UHIE_Marburg_2018_LUC_all_Sommer.tif"))
+
+# convert LST data from Kelvin to Celsius
+LST_2000 <- LST_2000 - 272.15
+LST_2006 <- LST_2006 - 272.15
+LST_2012 <- LST_2012 - 272.15
+LST_2018 <- LST_2018 - 272.15
 
 # define color palettes
 pal_clc <- c(colors()[59],  colors()[148],colors()[51], colors()[123])
 
 pal_lst <- rev(brewer.pal(11,"RdBu"))
 
-pal_uhi <- brewer.pal(5, "OrRd")
+pal_uhi <- rev(brewer.pal(5,"RdBu"))
 
 # new attribute table for CLC data
 attributes_CLC <- data.frame(ID = 1:4,                                                                         
                              value = c("Bebaute Flächen", "Landwirtschaftliche Flächen", "Wald", "Gewässer"))
 
-# convert LST data from Kelvin to Celsius
-LST_2000_C <- LST_2000 -272.15
+
 ```
 
-text - Erklärung was ist UHI und warum relevant
+text - Erklärung was ist UHI, warum relevant, was kann man dagegen tun - allgemein
 
+text - UHI in Marburg (vielleicht kleine Zusammenfassung der Ergebnisse)
+
+text - Erklären was wir gemacht haben: 
 Wir haben mithilfe von Satellitendaten, die die Oberflächentemperatur aufzeichnen, berechnet wie stark der Hitzeinseleffekt in Marburg in den Jahren 2000, 2006, 2012 und 2018 ausgeprägt war.
+Dafür haben wir die Temperatur innerhalb des Stadtgebiets mit der Temperatur in einem Umkreis von 10km verglichen.
 
-Dafür haben wir die Temperatur innerhalb des Stadtgebiets mit der Temperatur in einem Umkreis von 10km verglichen:
+text - wie umgehen mit mapview
 
 ```{r echo = FALSE, message=FALSE}
-mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE) + 
-  mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE)
+mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, layer.name = "Stadtgebiet Marburg") + 
+  mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE, layer.name = "10 km Puffer um die Stadt")
 ```
 
+Im Folgenden zeigen wir 
+* den Hitzeinseleffekt im Jahr 2000 
+* den Hitzeinseleffekt im Jahr 2006 
+* den Hitzeinseleffekt im Jahr 2012 
+* den Hitzeinseleffekt im Jahr 2018
+* Lösungsansätze in Marburg
 
 ## Hitzeinseleffekt im Jahr 2000
+
+TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
+
+Abbildung/Tabelle: Klimadaten von Cölbe
+
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
 CLC_2000@data@attributes[[1]] <- attributes_CLC
 
-m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE) +
-  mapview(LST_2000_C, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, 
+             popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
+  mapview(LST_2000, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
   mapview(CLC_2000, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
   mapview(UHI_2000, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
   
@@ -76,3 +111,73 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 ```
 
+## Hitzeinseleffekt im Jahr 2006
+
+TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
+
+Abbildung/Tabelle: Klimadaten von Cölbe
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+CLC_2006@data@attributes[[1]] <- attributes_CLC
+
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
+  mapview(LST_2006, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+  mapview(CLC_2006, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
+  mapview(UHI_2006, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
+  
+
+m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
+                 lat = mean(coordinates(Marburg_shp)[,2]), 
+                 zoom = 10)
+
+```
+
+
+## Hitzeinseleffekt im Jahr 2012
+
+TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
+
+Abbildung/Tabelle: Klimadaten von Cölbe
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+CLC_2012@data@attributes[[1]] <- attributes_CLC
+
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
+  mapview(LST_2012, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+  mapview(CLC_2012, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
+  mapview(UHI_2012, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
+  
+
+m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
+                 lat = mean(coordinates(Marburg_shp)[,2]), 
+                 zoom = 10)
+
+```
+
+
+## Hitzeinseleffekt im Jahr 2018
+
+TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
+
+Abbildung/Tabelle: Klimadaten von Cölbe
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+CLC_2018@data@attributes[[1]] <- attributes_CLC
+
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
+  mapview(LST_2018, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+  mapview(CLC_2018, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
+  mapview(UHI_2018, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
+  
+
+m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
+                 lat = mean(coordinates(Marburg_shp)[,2]), 
+                 zoom = 10)
+
+```
+
+
+## Lösungsstrategien in Marburg
