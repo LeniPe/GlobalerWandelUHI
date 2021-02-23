@@ -71,6 +71,7 @@ text - Erklärung was ist UHI, warum relevant, was kann man dagegen tun - allgem
 text - UHI in Marburg (vielleicht kleine Zusammenfassung der Ergebnisse)
 
 text - Erklären was wir gemacht haben: 
+text - woher kommen die Daten (open source) und grob wie haben wir sie berechnet?
 Wir haben mithilfe von Satellitendaten, die die Oberflächentemperatur aufzeichnen, berechnet wie stark der Hitzeinseleffekt in Marburg in den Jahren 2000, 2006, 2012 und 2018 ausgeprägt war.
 Dafür haben wir die Temperatur innerhalb des Stadtgebiets mit der Temperatur in einem Umkreis von 10km verglichen.
 
@@ -92,7 +93,9 @@ Im Folgenden zeigen wir
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
-Abbildung/Tabelle: Klimadaten von Cölbe
+UHI von 1.14°C
+
+TExt: How To : Erklären wie Karte funktioniert und was man sieht
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -110,12 +113,14 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
                  zoom = 10)
 
 ```
+Untertitel Karte: UHI-Untersuchung im Jahr 2000.
+
 
 ## Hitzeinseleffekt im Jahr 2006
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
+UHI von 1.25°C
 
-Abbildung/Tabelle: Klimadaten von Cölbe
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -138,7 +143,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
-Abbildung/Tabelle: Klimadaten von Cölbe
+UHI von 1.09°C
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -161,7 +166,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
-Abbildung/Tabelle: Klimadaten von Cölbe
+UHI von 0.69°C
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -179,5 +184,68 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 ```
 
+## Interpretation der Ergebnisse
 
-## Lösungsstrategien in Marburg
+Jahr    | UHI in °C
+------- | ---------
+2000    | 1.14
+2006    | 1.25
+2012    | 1.09
+2018    | 0.69
+
+```{r echo = FALSE, message=FALSE, warning=FALSE, out.width=c('50%', '50%'), fig.show='hold'}
+# load data
+lang_Mittel <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/lang_Mittel.rds")
+DF_Sommer_Mittelwerte <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/Mittelwerte_Sommer.rds")
+
+# plot precipitation
+
+niederschlag_lang_mittel_line <- c(lang_Mittel$Niederschlag, lang_Mittel$Niederschlag, lang_Mittel$Niederschlag, lang_Mittel$Niederschlag)
+par(mar = c(5, 4, 4, 4) + 0.3)
+df_bar <- barplot(DF_Sommer_Mittelwerte$Niederschlag,
+                  ylab = "Niederschlag (in mm)",
+                  ylim = c(0, 100),
+                  xlab = "Jahr",
+                  names.arg = c("2000", "2006", "2012", "2018"),
+                  main  = "Mittlerer Niederschlag der Sommermonate \n Juni, Juli und August in Coelbe \n (rote Linie = langjaehriges Mittel von 1988-2018)",
+                  col = "darkblue")
+lines(x = df_bar, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
+lines(x = 0.5 + df_bar, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
+lines(x = df_bar - 0.5, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
+
+# plot temperature
+
+Temperatur_lang_mittel_line <- c(lang_Mittel$Temperatur, lang_Mittel$Temperatur, lang_Mittel$Temperatur, lang_Mittel$Temperatur)
+par(mar = c(5, 4, 4, 4) + 0.3)
+df_bar <- barplot(DF_Sommer_Mittelwerte$Temperatur,
+                  ylab = "Temperatur (in ?C)",
+                  ylim = c(0, 30),
+                  xlab = "Jahr",
+                  names.arg = c("2000", "2006", "2012", "2018"),
+                  main  = "Mittlerer Temperatur der Sommermonate \n Juni, Juli und August in Coelbe \n (rote Linie = langjaehriges Mittel von 1988-2018)",
+                  col = "orange")
+lines(x = df_bar, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
+lines(x = 0.5 + df_bar, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
+lines(x = df_bar - 0.5, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
+
+```
+
+
+## Lösungsstrategien
+
+Was kann getan werden um den Hitzeinseleffekt in Marburg zu reduzieren und was wird schon getan? 
+
+**Grünflächen**
+
+* Grünflächen wirken sich positiv auf das Stadtklima aus. Bäume spenden Schatten und kühlen die Umgebung außerdem durch ihre Verdunstungskälte. Auch Begrünte Dächer geben Verdunstungskälte ab. Außerdem reduzieren sie die Bodenversiegelung, die zum Hitzeinseleffekt beiträgt.
+
+* Um Eigentümer zu motivieren ihre Dächer zu begrünen, hat die Stadt Marburg ein Förderprogramm für Gründächer aufgelegt und bezuschusst bis zu 50% der Kosten einer Begrünungsmaßnahme. Weitere Informationen sind hier zu finden: [Gründach-Zuschuss Stadt Marburg](https://www.marburg.de/leben-in-marburg/umwelt-klima/klimaschutz/foerderprogramme-von-marburg/gruendach-zuschuss/)
+
+* Für einen ersten Eindruck, ob ein Dach für eine Dachbegrünung geeignet ist, hat die Stadt Marburg ein digitales Gründach Kataster in Auftrag gegeben. Das Gründach Kataster gibt Auskunft über die allgemeine Eignung eines Daches zur Begrünung, sowie zu erwartende Kosten und geeigneten Pflanzen. [Hier geht es zum Gründach Kataster](https://www.gpm-webgis-10.de/geoapp/gruendachkataster/marburg/)
+
+**Klimaschutz**
+
+* Klimawandel und Hitzeinseleffekt sind eng miteinander verknüpft. Zum Beispiel werden Extremwetterereignisse, wie Hitzewellen, die durch den Klimawandel häufiger auftreten, durch den Hitzeinseleffekt verstärkt. Deshalb trägt auch Klimaschutz zur Reduzierung des Hitzeinseleffekts bei.
+
+* Die Stadt Marburg hat sich das Ziel gesetzt bis zum Jahr 2030 eine klimaneutrale Stadt zu werden und hat mit dem Klima-Aktionsplan konkrete Maßnahmen zur Erreichung des Ziels entwickelt. Der Klima-Aktionsplan kann hier eingesehen werden: [Klima-Aktionsplan 2030](https://www.marburg.de/downloads/datei/OTAwMDE3MTIzOy07L3d3dy92aHRkb2NzL21hcmJ1cmcvbWFyYnVyZy9tZWRpZW4vZG9rdW1lbnRlLzIwMjBfMDZfMjlfa2xpbWFfYWt0aW9uc3BsYW5fMjAzMF9maW5hbF9mdWVyX2hvbWVwYWdlXy5wZGY%3D)
+
