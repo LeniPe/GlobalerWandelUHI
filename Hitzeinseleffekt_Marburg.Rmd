@@ -30,6 +30,10 @@ outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_T
 Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
 Buffer_shp <- shapefile(file.path(outdir, "2000/Marburg_2000_buffer.shp"))
 
+lang_Mittel <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/lang_Mittel.rds")
+DF_Sommer_Mittelwerte <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/Mittelwerte_Sommer.rds")
+
+
 CLC_2000 <- raster(file.path(clcdir, "CLC_2000_reclass.tif"))
 LST_2000 <- raster(file.path(lstdir, "2000/LST_2000_mean_AOI.tif"))
 UHI_2000 <- raster(file.path(outdir, "2000/UHIE_Marburg_2000_LUC_all_Sommer.tif"))
@@ -82,14 +86,9 @@ mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2,
   mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE, layer.name = "10 km Puffer um die Stadt")
 ```
 
-Im Folgenden zeigen wir 
-* den Hitzeinseleffekt im Jahr 2000 
-* den Hitzeinseleffekt im Jahr 2006 
-* den Hitzeinseleffekt im Jahr 2012 
-* den Hitzeinseleffekt im Jahr 2018
-* Lösungsansätze in Marburg
+## Ergebnisse der Berechnung
 
-## Hitzeinseleffekt im Jahr 2000
+### Hitzeinseleffekt im Jahr 2000
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
@@ -116,7 +115,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 Untertitel Karte: UHI-Untersuchung im Jahr 2000.
 
 
-## Hitzeinseleffekt im Jahr 2006
+### Hitzeinseleffekt im Jahr 2006
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 UHI von 1.25°C
@@ -139,7 +138,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 ```
 
 
-## Hitzeinseleffekt im Jahr 2012
+### Hitzeinseleffekt im Jahr 2012
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
@@ -162,7 +161,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 ```
 
 
-## Hitzeinseleffekt im Jahr 2018
+### Hitzeinseleffekt im Jahr 2018
 
 TEXT: Beschreibung des Klimas in diesem Jahr, Besonderheiten
 
@@ -194,9 +193,6 @@ Jahr    | UHI in °C
 2018    | 0.69
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE, out.width=c('50%', '50%'), fig.show='hold'}
-# load data
-lang_Mittel <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/lang_Mittel.rds")
-DF_Sommer_Mittelwerte <- readRDS("C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation/Mittelwerte_Sommer.rds")
 
 # plot precipitation
 
