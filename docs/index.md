@@ -5,7 +5,7 @@ toc: true
 # Hitzeinseleffekt in Marburg
 Jonas Müller und Lena Perzlmaier
 
-{% include figure image_path="/assets/Marburg_Schloss2.jpg" %}
+![Marburg Schloss](https://raw.githubusercontent.com/LeniPe/GlobalerWandelUHI/master/docs/assets/Marburg_Schloss2.jpg)
 
 ## Was ist die städtische Wärmeinsel?
 
