@@ -1,0 +1,95 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load libraries
+library(raster)
+library(mapview)
+library(leaflet)
+library(RColorBrewer)
+library(lattice)
+
+# load Verzeichnisse
+
+## Lena
+shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
+shapefile <- '/Marburg_Stadtgebiet.shp'
+lstdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/LST_Daten"
+clcdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/CLC/reclass"
+outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/UHI_Marburg_Ergebnisse'
+climdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation"
+
+# ## Jonas
+# shapedir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/Verwaltungdsebenen_GADM'
+# shapefile <- '/Marburg_Stadtgebiet.shp'
+# lstdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/LST_Daten"
+# clcdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/CLC/reclass"
+# outdir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/UHI_Marburg_Ergebnisse/'
+
+# load data
+Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
+Buffer_shp <- shapefile(file.path(outdir, "2000/Marburg_2000_buffer.shp"))
+
+lang_Mittel <- readRDS(file.path(climdir, "lang_Mittel.rds"))
+DF_Sommer_Mittelwerte <- readRDS(file.path(climdir, "Mittelwerte_Sommer.rds"))
+
+
+
+CLC_2000 <- raster(file.path(clcdir, "CLC_2000_reclass.tif"))
+LST_2000 <- raster(file.path(lstdir, "2000/LST_2000_mean_AOI.tif"))
+UHI_2000 <- raster(file.path(outdir, "2000/UHIE_Marburg_2000_LUC_all_Sommer.tif"))
+
+CLC_2006 <- raster(file.path(clcdir, "CLC_2006_reclass.tif"))
+LST_2006 <- raster(file.path(lstdir, "2006/LST_2006_mean_AOI.tif"))
+UHI_2006 <- raster(file.path(outdir, "2006/UHIE_Marburg_2006_LUC_all_Sommer.tif"))
+
+CLC_2012 <- raster(file.path(clcdir, "CLC_2012_reclass.tif"))
+LST_2012 <- raster(file.path(lstdir, "2012/LST_2012_mean_AOI.tif"))
+UHI_2012 <- raster(file.path(outdir, "2012/UHIE_Marburg_2012_LUC_all_Sommer.tif"))
+
+CLC_2018 <- raster(file.path(clcdir, "CLC_2018_reclass.tif"))
+LST_2018 <- raster(file.path(lstdir, "2018/LST_2018_mean_AOI.tif"))
+UHI_2018 <- raster(file.path(outdir, "2018/UHIE_Marburg_2018_LUC_all_Sommer.tif"))
+
+# convert LST data from Kelvin to Celsius
+LST_2000 <- LST_2000 - 273.15
+LST_2006 <- LST_2006 - 273.15
+LST_2012 <- LST_2012 - 273.15
+LST_2018 <- LST_2018 - 273.15
+
+# define color palettes
+pal_clc <- c(colors()[59],  colors()[148],colors()[51], colors()[123])
+
+pal_lst <- rev(brewer.pal(11,"RdBu"))
+
+pal_uhi <- rev(brewer.pal(5,"RdBu"))
+
+# new attribute table for CLC data
+attributes_CLC <- data.frame(ID = 1:4,                                                                         
+                             value = c("Bebaute Flächen", "Landwirtschaftliche Flächen", "Wald", "Gewässer"))
+
+
+```
+
+
+
+```{r echo = FALSE, message=FALSE, warning=FALSE}
+
+CLC_2000@data@attributes[[1]] <- attributes_CLC
+
+m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, 
+             popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
+  mapview(LST_2000, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
+  mapview(CLC_2000, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
+  mapview(UHI_2000, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
+  
+
+m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
+                 lat = mean(coordinates(Marburg_shp)[,2]), 
+                 zoom = 10)
+
+```
+
