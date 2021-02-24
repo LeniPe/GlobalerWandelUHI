@@ -20,19 +20,28 @@ library(RColorBrewer)
 library(lattice)
 
 # load Verzeichnisse
-shapedir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/Verwaltungdsebenen_GADM'
-shapefile <- '/Marburg_Stadtgebiet.shp'
-lstdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/LST_Daten"
-clcdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/CLC/reclass"
 
-outdir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/UHI_Marburg_Ergebnisse/'
+## Lena
+shapedir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Verwaltungdsebenen_GADM'
+shapefile <- '/Marburg_Stadtgebiet.shp'
+lstdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/LST_Daten"
+clcdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/CLC/reclass"
+outdir <- 'C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/UHI_Marburg_Ergebnisse'
+climdir <- "C:/Users/Lena/Documents/Uni_Marburg/WS_2021/Globaler Wandel/Lokaler_Teil/Coelbe_Wetterstation"
+
+# ## Jonas
+# shapedir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/Verwaltungdsebenen_GADM'
+# shapefile <- '/Marburg_Stadtgebiet.shp'
+# lstdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/LST_Daten"
+# clcdir <- "G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/CLC/reclass"
+# outdir <- 'G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/UHI_Marburg_Ergebnisse/'
 
 # load data
 Marburg_shp <- shapefile(file.path(shapedir, "Marburg_Stadtgebiet.shp"))
 Buffer_shp <- shapefile(file.path(outdir, "2000/Marburg_2000_buffer.shp"))
 
-lang_Mittel <- readRDS("G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/Coelbe_Wetterstation/lang_Mittel.rds")
-DF_Sommer_Mittelwerte <- readRDS("G:/Studium_Geographie/MSc_Physische_Geographie/Kurse/Globaler Wandel/Stadtklima in Marburg/Lokaler_Teil/Coelbe_Wetterstation/Mittelwerte_Sommer.rds")
+lang_Mittel <- readRDS(file.path(climdir, "lang_Mittel.rds"))
+DF_Sommer_Mittelwerte <- readRDS(file.path(climdir, "Mittelwerte_Sommer.rds"))
 
 
 
@@ -72,24 +81,29 @@ attributes_CLC <- data.frame(ID = 1:4,
 
 ```
 
-### Was ist die städtische Wärmeinsel?
+## Was ist die städtische Wärmeinsel?
 
 Die städtische Wärmeinsel (engl. Urban Heat Island – kurz: UHI) ist das Ergebnis einer Lufttemperaturdifferenz zwischen der wärmeren Stadt und dem kühlerem Umland. Für diese Differenz sind verschiedene Faktoren verantwortlich. Vor allem jedoch der hohe Anteil versiegelter und bebauter Flächen in urbanen Gebieten, aber auch Luftschadstoffe und anthropogene Wärmequellen.
 
-### Berechnung der städtischen Wärmeinsel von Marburg
+## Berechnung der städtischen Wärmeinsel von Marburg
 
-Diese Differenz wurde  mit Satellitendaten der Oberflächentemperatur [^1] für die Jahre 2000, 2006, 2012 und 2018 berechnet. Dazu wurde noch zusätzlich ein Geodatensatz benötigt, welcher Informationen über die Landnutzung [^2] benötigt. In der ersten interaktiven Karte ist das Stadtgebiet von Marburg zu sehen, sowie eine 10 km breite Pufferzone. Für die Berechnung werden folgende Informationen benötigt:
-- die städtische Oberflächentemperatur
-- die ländliche Oberflächentemperatur
+Diese Differenz wurde  mit Satellitendaten der Oberflächentemperatur[^1] für die Jahre 2000, 2006, 2012 und 2018 berechnet. Dazu wurde noch zusätzlich ein Geodatensatz benötigt, welcher Informationen über die Landnutzung[^2] bereitstellt. In der ersten interaktiven Karte ist das Stadtgebiet von Marburg zu sehen, sowie eine 10 km breite Pufferzone. Für die Berechnung werden folgende Informationen benötigt:
+
+* die städtische Oberflächentemperatur
+
+* die ländliche Oberflächentemperatur
+
 Für die städtische Oberflächentemperatur wurden alle Bereiche innerhalb des Stadtgebiets genutzt, die durch den Landnutzungsdatensatz als bebaute Flächen definiert worden sind. Für die ländliche Oberflächentemperatur wurden alle Bereiche innerhalb der Pufferzone genutzt, die durch den Landnutzungsdatensatz nicht als bebaute Fläche definiert worden sind.
+
+## Ergebnisse
 
 ### Vorwort zu den Ergebnissen
 
-Die Ausprägung der städtischen Wärmeinsel kann von Stadt zu Stadt trotz ähnlicher Größe sehr unterschiedlich sein. Das hängt unter anderem von den lokalen klimatischen Bedingungen, der  Topographie und auch der Landnutzung im angrenzenden Umland ab. Dabei gibt es beispielsweise große Unterschiede bei der Oberflächentemperatur zwischen Wäldern und Agrarflächen (siehe dazu [^3]). In Marburg besteht der überwiegende Teil der ländlichen Oberfläche in der näheren Umgebung aus Agrarflächen, besonders in Richtung Osten (Amöneburger Becken). Wenn man daher die Karte zur Oberflächentemperatur betrachtet verwundert es nicht, das diese Gebiete wesentlich wärmer sind als Bereiche mit größeren Waldfächen wie beispielswiese den Lahnbergen. 
+Die Ausprägung der städtischen Wärmeinsel kann von Stadt zu Stadt trotz ähnlicher Größe sehr unterschiedlich sein. Das hängt unter anderem von den lokalen klimatischen Bedingungen, der  Topographie und auch der Landnutzung im angrenzenden Umland ab. Dabei gibt es beispielsweise große Unterschiede bei der Oberflächentemperatur zwischen Wäldern und Agrarflächen (siehe dazu[^3]). In Marburg besteht der überwiegende Teil der ländlichen Oberfläche in der näheren Umgebung aus Agrarflächen, besonders in Richtung Osten (Amöneburger Becken). Wenn man daher die Karte zur Oberflächentemperatur betrachtet verwundert es nicht, das diese Gebiete wesentlich wärmer sind als Bereiche mit größeren Waldfächen wie beispielswiese den Lahnbergen. 
 
-**Temperatur und Niederschlag [^4]**
+**Temperatur und Niederschlag[^4]**
 
-Der Niederschlag nimmt für die Sommer der untersuchten Jahre kontinuierlich ab, wobei das Jahr 2018 durch einen besonders trockenen Sommer hervorsticht. Die Temperatur steigt über die Jahre leicht an und erreicht im Sommer 2018 mit ungefähr 20 Grad °C im Mittel den höchsten Wert.
+Der Niederschlag nimmt für die Sommer der untersuchten Jahre ab, wobei das Jahr 2018 durch einen besonders trockenen Sommer hervorsticht. Die Temperatur steigt über die Jahre leicht an und erreicht im Sommer 2018 mit ungefähr 20 Grad °C im Mittel den höchsten Wert.
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE, out.width=c('50%', '50%'), fig.show='hold'}
 
@@ -125,24 +139,26 @@ lines(x = df_bar - 0.5, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
 
 ```
 
-### How-to - Umgang mit interaktiven Karten
+**How-to - Umgang mit interaktiven Karten**
 
-Die hier erstellten und dargebotenen interaktiven Karten für die Untersuchung zur städtischen Wärmeinsel in Marburg bestehen aus fünf Teilkarten (im Folgenden als Layer bezeichnet). Diese sind links oben unterhalb des Minussymbols anwählbar. Der erste Layer ist die Basiskarte "OpenStreetMap.DE". Sie ist immer aktive und lässt sich nicht deaktivieren. Alle anderen Layer (Stadtgebiet Marburg, die Oberflächentemperatur, die Landnutzung und der Hitzeinseleffekt) sind durch das anklicken des Kästchens aktivierbar und deaktivierbar. Für alle Layer, bis auf das Stadtgebiet Marburgs, wird auf der rechten Seite eine Legende mit Informationen zur jeweiligen Karte angezeigt. Unterhalb der Legenden befinden sich Klickflächen zu den Karten. Beim betätigen jener, wird auf den entsprechenden Layer gezoomt.
+Die hier erstellten und dargebotenen interaktiven Karten für die Untersuchung zur städtischen Wärmeinsel in Marburg bestehen aus fünf Teilkarten (im Folgenden als Layer bezeichnet). Diese sind links oben unterhalb des Minussymbols anwählbar. Der erste Layer ist die Basiskarte "OpenStreetMap.DE". Sie ist immer aktiv und lässt sich nicht deaktivieren. Alle anderen Layer (Stadtgebiet Marburg, die Oberflächentemperatur, die Landnutzung und der Hitzeinseleffekt) sind durch das anklicken des Kästchens aktivierbar und deaktivierbar. Für alle Layer, bis auf das Stadtgebiet Marburgs, wird auf der rechten Seite eine Legende mit Informationen zur jeweiligen Karte angezeigt. Unterhalb der Legenden befinden sich Klickflächen zu den Karten. Beim betätigen jener, wird auf den entsprechenden Layer gezoomt.
 
 ```{r echo = FALSE, message=FALSE}
 mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, layer.name = "Stadtgebiet Marburg") + 
   mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE, layer.name = "10 km Puffer um die Stadt")
 ```
 
-## Jahresübergreifende Charaktermerkmale der städtischen Wärmeinsel in Marburg
+### Jahresübergreifende Charaktermerkmale der städtischen Wärmeinsel in Marburg
 
 Die städtische Wärmeinsel in Marburg hat über alle Jahre hinweg sehr ähnliche räumliche Muster. Die stärkste Ausprägung befindet sich zwischen Cappel/Richtsberg und dem Südviertel. Dort kann der Wärmeinseleffekt durchaus 2-3 °C erreichen. In Richtung der Randgebiete der Stadt ist eine deutliche Abschwächung zu erkennen. Die Waldgebiete der Lahnberge, Wehrda und Marbach sind klar zu erkennende Kälteinseln innerhalb des Stadtgebiets. Dort ist die Oberflächentemperatur im Vergleich zum Umland ungefähr 2 °C geringer. 
 
-### Das Ausnahmejahr 2018
+**Das Ausnahmejahr 2018**
 
 Im Mittel liegt für das Jahr 2018 der schwächste Wärmeinseleffekt vor, trotz eines wärmeren Sommers. Dies liegt daran, dass es in diesem Sommer besonders trocken gewesen ist, sodass sich vor allem die umliegenden Agrarflächen überdurchschnittlich stark erhitzten und die Differenz zu den städtischen Gebieten geringer war, als in den anderen Jahren. Dies verdeutlicht auch eine Schwachstelle bei der Berechnung der städtischen Wärmeinsel mit Satellitendaten, da solche Flächen bei der Berechnung für Marburg stärker ins Gewicht fallen.
 
-### Hitzeinseleffekt im Jahr 2000 (UHI von 1.14°C)
+### Ausprägung des Hitzeinselffektes in den jeweiligen Jahren {.tabset .tabset-fade}
+
+#### 2000 (UHI von 1.14°C)
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -161,7 +177,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 ```
 
-### Hitzeinseleffekt im Jahr 2006 (UHI von 1.25°C)
+#### 2006 (UHI von 1.25°C)
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -179,7 +195,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 ```
 
-### Hitzeinseleffekt im Jahr 2012 (UHI von 1.09°C)
+#### 2012 (UHI von 1.09°C)
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
@@ -197,7 +213,7 @@ m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
 
 ```
 
-### Hitzeinseleffekt im Jahr 2018 (UHI von 0.69°C)
+#### 2018 (UHI von 0.69°C)
 
 ```{r echo = FALSE, message=FALSE, warning=FALSE}
 
