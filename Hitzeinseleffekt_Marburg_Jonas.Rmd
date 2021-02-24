@@ -79,8 +79,11 @@ Die städtische Wärmeinsel (engl. Urban Heat Island – kurz: UHI) ist das Erge
 ### Berechnung der städtischen Wärmeinsel von Marburg
 
 Diese Differenz wurde  mit Satellitendaten der Oberflächentemperatur [^1] für die Jahre 2000, 2006, 2012 und 2018 berechnet. Dazu wurde noch zusätzlich ein Geodatensatz benötigt, welcher Informationen über die Landnutzung [^2] benötigt. In der ersten interaktiven Karte ist das Stadtgebiet von Marburg zu sehen, sowie eine 10 km breite Pufferzone. Für die Berechnung werden folgende Informationen benötigt:
-- die städtische Oberflächentemperatur
-- die ländliche Oberflächentemperatur
+
+* die städtische Oberflächentemperatur
+
+* die ländliche Oberflächentemperatur
+
 Für die städtische Oberflächentemperatur wurden alle Bereiche innerhalb des Stadtgebiets genutzt, die durch den Landnutzungsdatensatz als bebaute Flächen definiert worden sind. Für die ländliche Oberflächentemperatur wurden alle Bereiche innerhalb der Pufferzone genutzt, die durch den Landnutzungsdatensatz nicht als bebaute Fläche definiert worden sind.
 
 ### Vorwort zu den Ergebnissen
@@ -127,7 +130,7 @@ lines(x = df_bar - 0.5, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
 
 ### How-to - Umgang mit interaktiven Karten
 
-Die hier erstellten und dargebotenen interaktiven Karten für die Untersuchung zur städtischen Wärmeinsel in Marburg bestehen aus fünf Teilkarten (im Folgenden als Layer bezeichnet). Diese sind links oben unterhalb des Minussymbols anwählbar. Der erste Layer ist die Basiskarte "OpenStreetMap.DE". Sie ist immer aktive und lässt sich nicht deaktivieren. Alle anderen Layer (Stadtgebiet Marburg, die Oberflächentemperatur, die Landnutzung und der Hitzeinseleffekt) sind durch das anklicken des Kästchens aktivierbar und deaktivierbar. Für alle Layer, bis auf das Stadtgebiet Marburgs, wird auf der rechten Seite eine Legende mit Informationen zur jeweiligen Karte angezeigt. Unterhalb der Legenden befinden sich Klickflächen zu den Karten. Beim betätigen jener, wird auf den entsprechenden Layer gezoomt.
+Die hier erstellten und dargebotenen interaktiven Karten für die Untersuchung zur städtischen Wärmeinsel in Marburg bestehen aus fünf Teilkarten (im Folgenden als Layer bezeichnet). Diese sind links oben unterhalb des Minussymbols anwählbar. Der erste Layer ist die Basiskarte "OpenStreetMap.DE". Diese ist immer aktiv und lässt sich nicht deaktivieren. Alle anderen Layer (Stadtgebiet Marburg, die Oberflächentemperatur, die Landnutzung und der Hitzeinseleffekt) sind durch das anklicken des Kästchens aktivierbar und deaktivierbar. Für alle Layer, bis auf das Stadtgebiet Marburgs, wird auf der rechten Seite eine Legende mit Informationen zur jeweiligen Karte angezeigt. Unterhalb der Legenden befinden sich Klickflächen zu den Karten. Beim betätigen jener, wird auf den entsprechenden Layer gezoomt.
 
 ```{r echo = FALSE, message=FALSE}
 mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, layer.name = "Stadtgebiet Marburg") + 
