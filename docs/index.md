@@ -4,7 +4,7 @@ Jonas Müller und Lena Perzlmaier
 
 ![Marburg Schloss](assets/Marburg_Schloss2.jpg)
 
-{% include media url="/assets/map_2000.html" %}
+{% include map_2000.html %}
 
 ## Was ist die städtische Wärmeinsel?
 
