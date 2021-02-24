@@ -9,8 +9,7 @@ output:
     highlight: pygments
 ---
 
-```{r setup, include=FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, echo=FALSE, message=FALSE}
 
 # load libraries
 library(raster)
