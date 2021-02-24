@@ -26,48 +26,10 @@ Die Ausprägung der städtischen Wärmeinsel kann von Stadt zu Stadt trotz ähnl
 
 Der Niederschlag nimmt für die Sommer der untersuchten Jahre ab, wobei das Jahr 2018 durch einen besonders trockenen Sommer hervorsticht. Die Temperatur steigt über die Jahre leicht an und erreicht im Sommer 2018 mit ungefähr 20 Grad °C im Mittel den höchsten Wert.
 
-```{r echo = FALSE, message=FALSE, warning=FALSE, out.width=c('50%', '50%'), fig.show='hold'}
-
-# plot precipitation
-
-niederschlag_lang_mittel_line <- c(lang_Mittel$Niederschlag, lang_Mittel$Niederschlag, lang_Mittel$Niederschlag, lang_Mittel$Niederschlag)
-par(mar = c(5, 4, 4, 4) + 0.3)
-df_bar <- barplot(DF_Sommer_Mittelwerte$Niederschlag,
-                  ylab = "Niederschlag (in mm)",
-                  ylim = c(0, 100),
-                  xlab = "Jahr",
-                  names.arg = c("2000", "2006", "2012", "2018"),
-                  main  = "Mittlerer Niederschlag der Sommermonate \n Juni, Juli und August in Coelbe \n (rote Linie = langjaehriges Mittel von 1988-2018)",
-                  col = "darkblue")
-lines(x = df_bar, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
-lines(x = 0.5 + df_bar, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
-lines(x = df_bar - 0.5, y = niederschlag_lang_mittel_line, col = "red", lwd = 3)
-
-# plot temperature
-
-Temperatur_lang_mittel_line <- c(lang_Mittel$Temperatur, lang_Mittel$Temperatur, lang_Mittel$Temperatur, lang_Mittel$Temperatur)
-par(mar = c(5, 4, 4, 4) + 0.3)
-df_bar <- barplot(DF_Sommer_Mittelwerte$Temperatur,
-                  ylab = "Temperatur (in °C)",
-                  ylim = c(0, 30),
-                  xlab = "Jahr",
-                  names.arg = c("2000", "2006", "2012", "2018"),
-                  main  = "Mittlerer Temperatur der Sommermonate \n Juni, Juli und August in Coelbe \n (rote Linie = langjaehriges Mittel von 1988-2018)",
-                  col = "orange")
-lines(x = df_bar, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
-lines(x = 0.5 + df_bar, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
-lines(x = df_bar - 0.5, y = Temperatur_lang_mittel_line, col = "red", lwd = 3)
-
-```
-
 **How-to - Umgang mit interaktiven Karten**
 
 Die hier erstellten und dargebotenen interaktiven Karten für die Untersuchung zur städtischen Wärmeinsel in Marburg bestehen aus fünf Teilkarten (im Folgenden als Layer bezeichnet). Diese sind links oben unterhalb des Minussymbols anwählbar. Der erste Layer ist die Basiskarte "OpenStreetMap.DE". Sie ist immer aktiv und lässt sich nicht deaktivieren. Alle anderen Layer (Stadtgebiet Marburg, die Oberflächentemperatur, die Landnutzung und der Hitzeinseleffekt) sind durch das anklicken des Kästchens aktivierbar und deaktivierbar. Für alle Layer, bis auf das Stadtgebiet Marburgs, wird auf der rechten Seite eine Legende mit Informationen zur jeweiligen Karte angezeigt. Unterhalb der Legenden befinden sich Klickflächen zu den Karten. Beim betätigen jener, wird auf den entsprechenden Layer gezoomt.
 
-```{r echo = FALSE, message=FALSE}
-mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, layer.name = "Stadtgebiet Marburg") + 
-  mapview(Buffer_shp, alpha.regions = 0, lwd = 2, color = "darkgrey", legend = FALSE, layer.name = "10 km Puffer um die Stadt")
-```
 
 ### Jahresübergreifende Charaktermerkmale der städtischen Wärmeinsel in Marburg
 
@@ -85,57 +47,10 @@ Im Mittel liegt für das Jahr 2018 der schwächste Wärmeinseleffekt vor, trotz 
 
 #### 2006 (UHI von 1.25°C)
 
-```{r echo = FALSE, message=FALSE, warning=FALSE}
-
-CLC_2006@data@attributes[[1]] <- attributes_CLC
-
-m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
-  mapview(LST_2006, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
-  mapview(CLC_2006, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
-  mapview(UHI_2006, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
-  
-
-m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
-                 lat = mean(coordinates(Marburg_shp)[,2]), 
-                 zoom = 10)
-
-```
-
 #### 2012 (UHI von 1.09°C)
 
-```{r echo = FALSE, message=FALSE, warning=FALSE}
-
-CLC_2012@data@attributes[[1]] <- attributes_CLC
-
-m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
-  mapview(LST_2012, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
-  mapview(CLC_2012, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
-  mapview(UHI_2012, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
-  
-
-m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
-                 lat = mean(coordinates(Marburg_shp)[,2]), 
-                 zoom = 10)
-
-```
 
 #### 2018 (UHI von 0.69°C)
-
-```{r echo = FALSE, message=FALSE, warning=FALSE}
-
-CLC_2018@data@attributes[[1]] <- attributes_CLC
-
-m <- mapview(Marburg_shp, map.types = "OpenStreetMap.DE", alpha.regions = 0, lwd = 2, legend = FALSE, popup = FALSE, label = FALSE, layer.name ="Stadtgebiet Marburg") +
-  mapview(LST_2018, col.regions = pal_lst, layer.name = "Oberflaechentemperatur") +
-  mapview(CLC_2018, col.regions = pal_clc, layer.name = "Landnutzung", na.color = "transparent") +
-  mapview(UHI_2018, col.regions = pal_uhi, layer.name = "Hitzeinseleffekt", na.color = "transparent" )
-  
-
-m@map %>%  setView(lng = mean(coordinates(Marburg_shp)[,1]),
-                 lat = mean(coordinates(Marburg_shp)[,2]), 
-                 zoom = 10)
-
-```
 
 ## Lösungsstrategien
 
