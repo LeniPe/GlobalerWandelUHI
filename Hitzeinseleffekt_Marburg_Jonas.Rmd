@@ -1,8 +1,12 @@
 ---
 title: "Hitzeinseleffekt in Marburg"
 author: "Lena Perzlmaier & Jonas Müller"
-output: html_document
- 
+output:   
+  html_document:
+    toc: true
+    toc_float: true
+    theme: sandstone
+    highlight: pygments
 ---
 
 ```{r setup, include=FALSE, message=FALSE}
