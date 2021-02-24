@@ -1,5 +1,11 @@
+---
+toc: true
+---
+
 # Hitzeinseleffekt in Marburg
 Jonas Müller und Lena Perzlmaier
+
+{% include figure image_path="/assets/Marburg_Schloss2.jpg" %}
 
 ## Was ist die städtische Wärmeinsel?
 
@@ -42,8 +48,6 @@ Im Mittel liegt für das Jahr 2018 der schwächste Wärmeinseleffekt vor, trotz 
 ### Ausprägung des Hitzeinselffektes in den jeweiligen Jahren {.tabset .tabset-fade}
 
 #### 2000 (UHI von 1.14°C)
-
-{% include media url="/assets/map_2000.html" %}
 
 #### 2006 (UHI von 1.25°C)
 
