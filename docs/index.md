@@ -4,6 +4,8 @@ Jonas Müller und Lena Perzlmaier
 
 ![Marburg Schloss](assets/Marburg_Schloss2.jpg)
 
+{% include media url="/assets/mmap_2000.html" %}
+
 ## Was ist die städtische Wärmeinsel?
 
 Die städtische Wärmeinsel (engl. Urban Heat Island – kurz: UHI) ist das Ergebnis einer Lufttemperaturdifferenz zwischen der wärmeren Stadt und dem kühlerem Umland. Für diese Differenz sind verschiedene Faktoren verantwortlich. Vor allem jedoch der hohe Anteil versiegelter und bebauter Flächen in urbanen Gebieten, aber auch Luftschadstoffe und anthropogene Wärmequellen.
